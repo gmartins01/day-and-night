@@ -1,12 +1,12 @@
 import math
 
-from games.connect4.player import Connect4Player
-from games.connect4.result import Connect4Result
-from games.connect4.state import Connect4State
+from games.day_and_night.player import DayAndNightPlayer
+from games.day_and_night.result import DayAndNightResult
+from games.day_and_night.state import DayAndNightState
 from games.state import State
 
 
-class MinimaxConnect4Player(Connect4Player):
+class MinimaxDayAndNightPlayer(DayAndNightPlayer):
 
     def __init__(self, name):
         super().__init__(name)
@@ -16,7 +16,7 @@ class MinimaxConnect4Player(Connect4Player):
     It's not a great heuristic as it doesn't take into consideration a defensive approach
     '''
 
-    def __heuristic(self, state: Connect4State):
+    def __heuristic(self, state: DayAndNightState):
         grid = state.get_grid()
         longest = 0
 
@@ -89,14 +89,14 @@ class MinimaxConnect4Player(Connect4Player):
     to optimize the search :param is_initial_node: if true, the function will return the action with max ev, 
     otherwise it return the max ev (ev = expected value) """
 
-    def minimax(self, state: Connect4State, depth: int, alpha: int = -math.inf, beta: int = math.inf,
+    def minimax(self, state: DayAndNightState, depth: int, alpha: int = -math.inf, beta: int = math.inf,
                 is_initial_node: bool = True):
         # first we check if we are in a terminal node (victory, draw or loose)
         if state.is_finished():
             return {
-                Connect4Result.WIN: 40,
-                Connect4Result.LOOSE: -40,
-                Connect4Result.DRAW: 0
+                DayAndNightResult.WIN: 40,
+                DayAndNightResult.LOOSE: -40,
+                DayAndNightResult.DRAW: 0
             }[state.get_result(self.get_current_pos())]
 
         # if we reached the maximum depth, we will return the value of the heuristic
@@ -130,7 +130,7 @@ class MinimaxConnect4Player(Connect4Player):
                 beta = min(beta, value)
             return value
 
-    def get_action(self, state: Connect4State):
+    def get_action(self, state: DayAndNightState):
         return self.minimax(state, 5)
 
     def event_action(self, pos: int, action, new_state: State):

@@ -35,7 +35,7 @@ docker compose up --build
 ```
 docker compose run --rm app python example.py
 ```
-* Run a specific file *example.py* in **watch mode**:
+* Run a specific file *main.py* in **watch mode**:
 ```
-docker compose run --rm app nodemon example.py
+docker compose run --rm ai-games python main.py
 ```
