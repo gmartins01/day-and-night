@@ -13,7 +13,8 @@ class HumanDayAndNightPlayer(DayAndNightPlayer):
         while True:
             # noinspection PyBroadException
             try:
-                return DayAndNightAction(int(input(f"Player {state.get_acting_player()}, choose a column: ")))
+                return DayAndNightAction(int(input(f"Player {state.get_acting_player()}, choose a row: ")),
+                                         int(input(f"Player {state.get_acting_player()}, choose a column: ")))
             except Exception:
                 continue
 

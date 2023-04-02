@@ -24,17 +24,17 @@ def main():
     c4_simulations = [
         # uncomment to play as human
         {
-           "name": "DayAndNight - Human VS Random",
-           "player1": HumanDayAndNightPlayer("Human"),
-           "player2": RandomDayAndNightPlayer("Random")
+           "name": "Day and Night - Human VS Human",
+           "player1": HumanDayAndNightPlayer("Human 1"),
+           "player2": HumanDayAndNightPlayer("Human 2")
         },
         {
-            "name": "DayAndNight - Random VS Random",
+            "name": "Day and Night - Random VS Random",
             "player1": RandomDayAndNightPlayer("Random 1"),
             "player2": RandomDayAndNightPlayer("Random 2")
         },
         {
-            "name": "DayAndNight - Greedy VS Random",
+            "name": "Day and Night - Greedy VS Random",
             "player1": GreedyDayAndNightPlayer("Greedy"),
             "player2": RandomDayAndNightPlayer("Random")
         },

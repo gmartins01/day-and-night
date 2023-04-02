@@ -4,6 +4,8 @@ from games.day_and_night.action import DayAndNightAction
 from games.day_and_night.result import DayAndNightResult
 from games.state import State
 
+BLK = -1
+WHI = -2
 
 class DayAndNightState(State):
     EMPTY_CELL = -1
@@ -23,7 +25,19 @@ class DayAndNightState(State):
         """
         the grid
         """
-        self.__grid = [[DayAndNightState.EMPTY_CELL for _i in range(self.__num_cols)] for _j in range(self.__num_rows)]
+        self.__grid = [
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
+            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
+            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
+            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
+            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
+            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
+            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI]
+        ]
 
         """
         counts the number of turns in the current game
@@ -89,7 +103,6 @@ class DayAndNightState(State):
         col = action.get_col()
         row = action.get_row()
 
-
         # valid column
         if col < 0 or col >= self.__num_cols:
             return False
@@ -103,7 +116,7 @@ class DayAndNightState(State):
         #    return False
 
         # valid move
-        if self.__grid[row][col] != DayAndNightState.EMPTY_CELL:
+        if self.__grid[row][col] != WHI and self.__grid[row][col] != BLK:
             return False
 
         return True
@@ -120,20 +133,31 @@ class DayAndNightState(State):
         # switch to next player
         self.__acting_player = 1 if self.__acting_player == 0 else 0
 
-
     def __display_cell(self, row, col):
         print({
-                  0: 'W',
-                  1: 'B',
-                  DayAndNightState.EMPTY_CELL: ' '
+                  0: ' B ',
+                  1: ' W ',
+                  BLK: '\033[1;40m   \033[0m',
+                  WHI: '\033[1;47m   \033[0m'
               }[self.__grid[row][col]], end="")
+    
+    # def __display_cell(self, row, col):
+    #     cell_value = self.__grid[row][col]
+    #     if cell_value == BLK:
+    #         print('\033[1;31m \033[0m', end="")
+    #     elif cell_value == WHI:
+    #         print('\033[47m \033[0m', end="")
+    #     else:
+    #         color = '\033[1;30m' if cell_value == BLK else '\033[1;37m'
+    #         background_color = '\033[47m' if (row+col) % 2 == 0 else '\033[40m'
+    #         print(f"{background_color}{color} {background_color}\033[0m,", end="")
 
     def __display_numbers(self):
         for col in range(0, self.__num_cols):
             if col < 10:
-                print(' ', end="")
+                print('  ', end="")
             if col >= 10:
-                print(' ', end="")
+                print('  ', end="")
             print(col, end="")
         print("")
 
@@ -141,6 +165,27 @@ class DayAndNightState(State):
         for col in range(0, self.__num_cols):
             print("---", end="")
         print("-")
+
+    # def display(self):
+    #     print("  ", end="")
+    #     self.__display_numbers()
+    #     self.__display_separator()
+
+    #     for row in range(0, self.__num_rows):
+    #         if row < 10:
+    #             print(row,' |', end="")
+    #         if row >= 10:
+    #             print(row,'|', end="")
+    #         for col in range(0, self.__num_cols):
+    #             self.__display_cell(row, col)
+    #             print('|', end="")
+
+    #         print("")
+    #         self.__display_separator()
+            
+    #     print("  ", end="")
+    #     self.__display_numbers()
+    #     print("")
 
     def display(self):
         print("  ", end="")
@@ -154,14 +199,15 @@ class DayAndNightState(State):
                 print(row,'|', end="")
             for col in range(0, self.__num_cols):
                 self.__display_cell(row, col)
-                print('|', end="")
+                print('', end="")
 
             print("")
-            self.__display_separator()
             
         print("  ", end="")
+        self.__display_separator()
         self.__display_numbers()
         print("")
+        
 
     def __is_full(self):
         return self.__turns_count > (self.__num_cols * self.__num_rows)
