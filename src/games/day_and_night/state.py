@@ -118,7 +118,7 @@ class DayAndNightState(State):
         #    return False
 
         # valid move
-        if self.__grid[row][col] != WHI and self.__grid[row][col] != BLK:
+        if self.__grid[row][col] != BLK:
             return False
 
         return True
@@ -129,9 +129,12 @@ class DayAndNightState(State):
         row_to = action.get_row_to()
         col_to = action.get_col_to()
 
-        print("row_from: " + str(row_from))
+        # Get the last digit from the cell value
+        cell_value = str(self.__grid[row_from][col_from])
+        player_index = int(cell_value[-1])
+
         # Check if player as a piece on the from position
-        if self.__grid[row_from][col_from] != self.__acting_player:
+        if player_index != self.__acting_player:
             return False
 
         # valid column
@@ -147,7 +150,7 @@ class DayAndNightState(State):
         #    return False
 
         # valid move
-        if self.__grid[row_to][col_to] != WHI and self.__grid[row_to][col_to] != BLK:
+        if self.__grid[row_to][col_to] != WHI:
             return False
 
         return True
@@ -159,7 +162,6 @@ class DayAndNightState(State):
         if isinstance(action,DayAndNightMoveAction):
             return self.validate_move_action(action)
 
-        print("aqui")
         return False
 
     def update(self, action: DayAndNightAction):
@@ -167,8 +169,11 @@ class DayAndNightState(State):
         if isinstance(action,DayAndNightAddAction):
             col = action.get_col()
             row = action.get_row()
-
-            self.__grid[row][col] = self.__acting_player
+            
+            play = int(str(self.__grid[row][col]) + str(self.__acting_player))
+    
+            self.__grid[row][col] = play
+          
 
         if isinstance(action,DayAndNightMoveAction):
             row_from = action.get_row_from()
@@ -176,8 +181,12 @@ class DayAndNightState(State):
             row_to = action.get_row_to()
             col_to = action.get_col_to()
 
-            self.__grid[row_to][col_to] = self.__grid[row_from][col_from]
+            play = int(str(self.__grid[row_to][col_to]) + str(self.__acting_player))
     
+            self.__grid[row_to][col_to] = play
+
+            self.__grid[row_from][col_from] = int(str(self.__grid[row_from][col_from])[:-1])
+
         # determine if there is a winner
         self.__has_winner = self.__check_winner(self.__acting_player)
 
@@ -186,8 +195,12 @@ class DayAndNightState(State):
 
     def __display_cell(self, row, col):
         print({
-                  0: ' B ',
-                  1: ' W ',
+                  #0: ' B ',
+                  #1: ' W ',
+                  -10:'\033[1;40m B \033[0m',# ◉
+                  -11:'\033[1;40m W \033[0m',
+                  -20:'\033[1;47m B \033[0m',
+                  -21:'\033[1;47m W \033[0m',
                   BLK: '\033[1;40m   \033[0m',
                   WHI: '\033[1;47m   \033[0m'
               }[self.__grid[row][col]], end="")
