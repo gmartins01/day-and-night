@@ -1,6 +1,8 @@
 from typing import Optional
 
 from games.day_and_night.action import DayAndNightAction
+from games.day_and_night.action import DayAndNightAddAction
+from games.day_and_night.action import DayAndNightMoveAction
 from games.day_and_night.result import DayAndNightResult
 from games.state import State
 
@@ -98,8 +100,8 @@ class DayAndNightState(State):
 
     def get_num_players(self):
         return 2
-
-    def validate_action(self, action: DayAndNightAction) -> bool:
+    
+    def validate_add_action(self,action: DayAndNightAddAction) -> bool:
         col = action.get_col()
         row = action.get_row()
 
@@ -121,11 +123,60 @@ class DayAndNightState(State):
 
         return True
 
-    def update(self, action: DayAndNightAction):
-        col = action.get_col()
-        row = action.get_row()
+    def validate_move_action(self,action: DayAndNightMoveAction) -> bool:
+        row_from = action.get_row_from()
+        col_from = action.get_col_from()
+        row_to = action.get_row_to()
+        col_to = action.get_col_to()
 
-        self.__grid[row][col] = self.__acting_player
+        print("row_from: " + str(row_from))
+        # Check if player as a piece on the from position
+        if self.__grid[row_from][col_from] != self.__acting_player:
+            return False
+
+        # valid column
+        if col_to < 0 or col_to >= self.__num_cols:
+            return False
+
+        # valid row
+        if row_to < 0 or row_to >= self.__num_rows:
+            return False
+
+        # full column
+        #if self.__grid[0][col] != DayAndNightState.EMPTY_CELL:
+        #    return False
+
+        # valid move
+        if self.__grid[row_to][col_to] != WHI and self.__grid[row_to][col_to] != BLK:
+            return False
+
+        return True
+
+    def validate_action(self, action: DayAndNightAction) -> bool:
+        
+        if isinstance(action,DayAndNightAddAction):
+            return self.validate_add_action(action)
+        if isinstance(action,DayAndNightMoveAction):
+            return self.validate_move_action(action)
+
+        print("aqui")
+        return False
+
+    def update(self, action: DayAndNightAction):
+        
+        if isinstance(action,DayAndNightAddAction):
+            col = action.get_col()
+            row = action.get_row()
+
+            self.__grid[row][col] = self.__acting_player
+
+        if isinstance(action,DayAndNightMoveAction):
+            row_from = action.get_row_from()
+            col_from = action.get_col_from()
+            row_to = action.get_row_to()
+            col_to = action.get_col_to()
+
+            self.__grid[row_to][col_to] = self.__grid[row_from][col_from]
     
         # determine if there is a winner
         self.__has_winner = self.__check_winner(self.__acting_player)
@@ -246,7 +297,7 @@ class DayAndNightState(State):
 
     def get_possible_actions(self):
         return list(filter(
-            lambda action: self.validate_action(action),
+            lambda action: self.validate_add_action(action),
             map(
                 lambda pos: DayAndNightAction(pos),
                 range(0, self.get_num_cols()))
