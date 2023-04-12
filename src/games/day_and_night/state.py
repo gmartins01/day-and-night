@@ -57,40 +57,42 @@ class DayAndNightState(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
-        # check for 4 across
+        # check for 5 across
         for row in range(0, self.__num_rows):
-            for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row][col + 1] == player and \
-                        self.__grid[row][col + 2] == player and \
-                        self.__grid[row][col + 3] == player:
+            for col in range(0, self.__num_cols - 4):
+                if (self.__grid[row][col] == int(str(WHI) + str(player)) or self.__grid[row][col] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row][col + 1] == int(str(WHI) + str(player)) or self.__grid[row][col + 1] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row][col + 2] == int(str(WHI) + str(player)) or self.__grid[row][col + 2] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row][col + 3] == int(str(WHI) + str(player)) or self.__grid[row][col + 3] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row][col + 4] == int(str(WHI) + str(player)) or self.__grid[row][col + 4] == int(str(BLK) + str(player))):
                     return True
 
-        # check for 4 up and down
-        for row in range(0, self.__num_rows - 3):
+        # check for 5 up and down
+        for row in range(0, self.__num_rows - 4):
             for col in range(0, self.__num_cols):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row + 1][col] == player and \
-                        self.__grid[row + 2][col] == player and \
-                        self.__grid[row + 3][col] == player:
+                if (self.__grid[row][col] == int(str(WHI) + str(player)) or self.__grid[row][col] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row + 1][col] == int(str(WHI) + str(player)) or self.__grid[row + 1][col] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row + 2][col] == int(str(WHI) + str(player)) or self.__grid[row + 2][col] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row + 3][col] == int(str(WHI) + str(player)) or self.__grid[row + 3][col] == int(str(BLK) + str(player))) and \
+                        (self.__grid[row + 4][col] == int(str(WHI) + str(player)) or self.__grid[row + 4][col] == int(str(BLK) + str(player))):
                     return True
 
         # check upward diagonal
         for row in range(3, self.__num_rows):
             for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row - 1][col + 1] == player and \
-                        self.__grid[row - 2][col + 2] == player and \
-                        self.__grid[row - 3][col + 3] == player:
+                if self.__grid[row][col] == int(str(WHI) + str(player)) and \
+                        self.__grid[row - 1][col + 1] == int(str(WHI) + str(player)) and \
+                        self.__grid[row - 2][col + 2] == int(str(WHI) + str(player)) and \
+                        self.__grid[row - 3][col + 3] == int(str(WHI) + str(player)):
                     return True
 
         # check downward diagonal
         for row in range(0, self.__num_rows - 3):
             for col in range(0, self.__num_cols - 3):
-                if self.__grid[row][col] == player and \
-                        self.__grid[row + 1][col + 1] == player and \
-                        self.__grid[row + 2][col + 2] == player and \
-                        self.__grid[row + 3][col + 3] == player:
+                if self.__grid[row][col] == int(str(WHI) + str(player)) and \
+                        self.__grid[row + 1][col + 1] == int(str(WHI) + str(player)) and \
+                        self.__grid[row + 2][col + 2] == int(str(WHI) + str(player)) and \
+                        self.__grid[row + 3][col + 3] == int(str(WHI) + str(player)):
                     return True
 
         return False
@@ -204,17 +206,6 @@ class DayAndNightState(State):
                   BLK: '\033[1;40m   \033[0m',
                   WHI: '\033[1;47m   \033[0m'
               }[self.__grid[row][col]], end="")
-    
-    # def __display_cell(self, row, col):
-    #     cell_value = self.__grid[row][col]
-    #     if cell_value == BLK:
-    #         print('\033[1;31m \033[0m', end="")
-    #     elif cell_value == WHI:
-    #         print('\033[47m \033[0m', end="")
-    #     else:
-    #         color = '\033[1;30m' if cell_value == BLK else '\033[1;37m'
-    #         background_color = '\033[47m' if (row+col) % 2 == 0 else '\033[40m'
-    #         print(f"{background_color}{color} {background_color}\033[0m,", end="")
 
     def __display_numbers(self):
         for col in range(0, self.__num_cols):
