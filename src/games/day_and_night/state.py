@@ -133,10 +133,15 @@ class DayAndNightState(State):
         row_to = action.get_row_to()
         col_to = action.get_col_to()
 
+        cell_from_value = self.__grid[row_from][col_from]
+        
         # Get the last digit from the cell value
-        cell_value = str(self.__grid[row_from][col_from])
-        player_index = int(cell_value[-1])
-
+        player_index = int(str(cell_from_value)[len(str(cell_from_value)) - 1])
+        
+        # Check is cell from is empty
+        if cell_from_value == WHI or cell_from_value == BLK:
+            return False
+        
         # Check if player as a piece on the from position
         if player_index != self.__acting_player:
             return False
@@ -149,16 +154,10 @@ class DayAndNightState(State):
         if row_to < 0 or row_to >= self.__num_rows:
             return False
 
-        # full column
-        #if self.__grid[0][col] != DayAndNightState.EMPTY_CELL:
-        #    return False
-
         # valid move
-        #(row_to != row_from and col_to != col_from) or \
         if self.__grid[row_to][col_to] != WHI or \
                 abs(row_to - row_from) > 1 or abs(col_to - col_from) > 1:
             return False
-
 
         return True
 
@@ -189,7 +188,7 @@ class DayAndNightState(State):
             col_to = action.get_col_to()
 
             play = int(str(self.__grid[row_to][col_to]) + str(self.__acting_player))
-    
+
             self.__grid[row_to][col_to] = play
 
             self.__grid[row_from][col_from] = int(str(self.__grid[row_from][col_from])[:-1])
