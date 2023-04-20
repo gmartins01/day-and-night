@@ -4,7 +4,6 @@ from games.day_and_night.players.random import RandomDayAndNightPlayer
 from games.day_and_night.simulator import DayAndNightSimulator
 from games.day_and_night.players.human import HumanDayAndNightPlayer
 from games.game_simulator import GameSimulator
-from games.day_and_night.players.easy import EasyDayAndNightPlayer
 
 def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
     print(f"----- {desc} -----")
@@ -20,25 +19,20 @@ def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
 def main():
     print("ESTG IA Games Simulator")
 
-    num_iterations = 2
+    num_iterations = 10
 
     c4_simulations = [
         # uncomment to play as human
+        # {
+        #    "name": "Day and Night - Human VS Human",
+        #    "player2": HumanDayAndNightPlayer("Human 1"),
+        #    "player1": HumanDayAndNightPlayer("Human 2")
+        # },
         {
-           "name": "Day and Night - Easy VS Human",
-           "player2": EasyDayAndNightPlayer("Human 1"),
-           "player1": EasyDayAndNightPlayer("Easy 2")
+            "name": "Day and Night - Greedy VS Random",
+            "player1": GreedyDayAndNightPlayer("Greedy"),
+            "player2": RandomDayAndNightPlayer("Random")
         },
-        # {
-        #     "name": "Day and Night - Random VS Random",
-        #     "player1": RandomDayAndNightPlayer("Random 1"),
-        #     "player2": RandomDayAndNightPlayer("Random 2")
-        # },
-        # {
-        #     "name": "Day and Night - Greedy VS Random",
-        #     "player1": GreedyDayAndNightPlayer("Greedy"),
-        #     "player2": RandomDayAndNightPlayer("Random")
-        # },
         # {
         #     "name": "Minimax VS Random",
         #     "player1": MinimaxDayAndNightPlayer("Minimax"),

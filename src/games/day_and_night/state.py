@@ -285,6 +285,28 @@ class DayAndNightState(State):
 
     def before_results(self):
         pass
+    
+    def get_possible_add_actions(self):
+        return list(filter(
+            lambda action: self.validate_add_action(action),
+            [
+                DayAndNightAddAction(row, col)
+                for row in range(self.get_num_rows())
+                for col in range(self.get_num_cols())
+            ]
+        ))
+    
+    def get_possible_move_actions(self):
+        return list(filter(
+            lambda action: self.validate_move_action(action),
+            [
+                DayAndNightMoveAction(row_from, col_from, row_to, col_to)
+                for row_from in range(self.get_num_rows())
+                for col_from in range(self.get_num_cols())
+                for row_to in range(self.get_num_rows())
+                for col_to in range(self.get_num_cols())
+            ]
+        ))
 
     def get_possible_actions(self):
         return list(filter(
