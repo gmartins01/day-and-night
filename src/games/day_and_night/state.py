@@ -11,6 +11,8 @@ WHI = -2
 
 class DayAndNightState(State):
     EMPTY_CELL = -1
+    EMPTY_BLK = -1
+    EMPTY_WHI = -2
 
     def __init__(self, size: int = 11):
         super().__init__()
@@ -315,6 +317,9 @@ class DayAndNightState(State):
                 lambda pos: DayAndNightAction(pos),
                 range(0, self.get_num_cols()))
         ))
+    
+    def get_possible_actions(self):
+        return self.get_possible_add_actions() + self.get_possible_move_actions()
 
     def sim_play(self, action):
         new_state = self.clone()
