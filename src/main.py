@@ -29,9 +29,9 @@ def main():
         #    "player1": HumanDayAndNightPlayer("Human 2")
         # },
         {
-            "name": "Day and Night - Greedy VS Human",
-            "player1": GreedyDayAndNightPlayer("Greedy"),
-            "player2": HumanDayAndNightPlayer("Human")
+            "name": "Day and Night - Human VS Greedy",
+            "player1": HumanDayAndNightPlayer("Human"),
+            "player2": GreedyDayAndNightPlayer("Greedy")
         },
         # {
         #     "name": "Minimax VS Random",

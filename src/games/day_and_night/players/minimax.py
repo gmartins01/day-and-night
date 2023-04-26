@@ -19,12 +19,15 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
     def __heuristic(self, state: DayAndNightState):
         grid = state.get_grid()
         longest = 0
+        CURRENT_ON_BLACK = int(str(state.EMPTY_BLK) + str(self.get_current_pos()))
+        CURRENT_ON_WHITE = int(str(state.EMPTY_WHI) + str(self.get_current_pos()))
 
         # check each line
         for row in range(0, state.get_num_rows()):
             seq = 0
             for col in range(0, state.get_num_cols()):
-                if grid[row][col] == self.get_current_pos():
+                if grid[row][col] == CURRENT_ON_BLACK or\
+                   grid[row][col] == CURRENT_ON_WHITE:
                     seq += 1
                 else:
                     if seq > longest:
@@ -38,7 +41,8 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
         for col in range(0, state.get_num_cols()):
             seq = 0
             for row in range(0, state.get_num_rows()):
-                if grid[row][col] == self.get_current_pos():
+                if grid[row][col] == CURRENT_ON_BLACK or\
+                   grid[row][col] == CURRENT_ON_WHITE:
                     seq += 1
                 else:
                     if seq > longest:
@@ -51,13 +55,19 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
         # check each upward diagonal
         for row in range(3, state.get_num_rows()):
             for col in range(0, state.get_num_cols() - 3):
-                seq1 = (1 if grid[row][col] == self.get_current_pos() else 0) + \
-                       (1 if grid[row - 1][col + 1] == self.get_current_pos() else 0) + \
-                       (1 if grid[row - 2][col + 2] == self.get_current_pos() else 0)
+                seq1 = (1 if grid[row][col] == CURRENT_ON_BLACK or\
+                            grid[row][col] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row - 1][col + 1] == CURRENT_ON_BLACK or \
+                            grid[row - 1][col + 1] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row - 2][col + 2] == CURRENT_ON_BLACK or \
+                         grid[row - 2][col + 2] == CURRENT_ON_WHITE else 0)
 
-                seq2 = (1 if grid[row - 1][col + 1] == self.get_current_pos() else 0) + \
-                       (1 if grid[row - 2][col + 2] == self.get_current_pos() else 0) + \
-                       (1 if grid[row - 3][col + 3] == self.get_current_pos() else 0)
+                seq2 = (1 if grid[row - 1][col + 1] == CURRENT_ON_BLACK or\
+                            grid[row - 1][col + 1] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row - 2][col + 2] == CURRENT_ON_BLACK or\
+                          grid[row - 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row - 3][col + 3] == CURRENT_ON_BLACK or\
+                          grid[row - 3][col + 3] == CURRENT_ON_WHITE else 0)
 
                 if seq1 > longest:
                     longest = seq1
@@ -68,13 +78,19 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
         # check each downward diagonal
         for row in range(0, state.get_num_rows() - 3):
             for col in range(0, state.get_num_cols() - 3):
-                seq1 = (1 if grid[row][col] == self.get_current_pos() else 0) + \
-                       (1 if grid[row + 1][col + 1] == self.get_current_pos() else 0) + \
-                       (1 if grid[row + 2][col + 2] == self.get_current_pos() else 0)
+                seq1 = (1 if grid[row][col] == CURRENT_ON_BLACK or\
+                         grid[row][col] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row + 1][col + 1] == CURRENT_ON_BLACK or \
+                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row + 2][col + 2] == CURRENT_ON_BLACK or\
+                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0)
 
-                seq2 = (1 if grid[row + 1][col + 1] == self.get_current_pos() else 0) + \
-                       (1 if grid[row + 2][col + 2] == self.get_current_pos() else 0) + \
-                       (1 if grid[row + 3][col + 3] == self.get_current_pos() else 0)
+                seq2 = (1 if grid[row + 1][col + 1] == CURRENT_ON_BLACK or\
+                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row + 2][col + 2] == CURRENT_ON_BLACK or\
+                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                       (1 if grid[row + 3][col + 3] == CURRENT_ON_BLACK or\
+                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0)
 
                 if seq1 > longest:
                     longest = seq1
@@ -117,7 +133,8 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
                 if value > beta:
                     break
                 alpha = max(alpha, value)
-
+            print("value: ", value)
+            print("selected action: ", selected_action)
             return selected_action if is_initial_node else value
 
         # if it is the opponent's turn

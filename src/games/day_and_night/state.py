@@ -289,6 +289,13 @@ class DayAndNightState(State):
         pass
     
     def get_possible_add_actions(self):
+        # actions = []
+        # for row in range(0,self.__num_rows):
+        #     for col in range(0,self.__num_cols):
+        #         action = DayAndNightAddAction(row,col)
+        #         if self.validate_add_action(action):
+        #             actions.append(action)
+        # return actions
         return list(filter(
             lambda action: self.validate_add_action(action),
             [
@@ -299,6 +306,15 @@ class DayAndNightState(State):
         ))
     
     def get_possible_move_actions(self):
+        # actions = []
+        # for row_from in range(0,self.__num_rows):
+        #     for col_from in range(0,self.__num_cols):
+        #         for row in range(0,self.__num_rows):
+        #             for col in range(0,self.__num_cols):
+        #                 action = DayAndNightMoveAction(row_from,col_from,row,col)
+        #                 if self.validate_move_action(action):
+        #                     actions.append(action)
+        # return actions
         return list(filter(
             lambda action: self.validate_move_action(action),
             [
@@ -309,15 +325,7 @@ class DayAndNightState(State):
                 for col_to in range(self.get_num_cols())
             ]
         ))
-
-    def get_possible_actions(self):
-        return list(filter(
-            lambda action: self.validate_add_action(action),
-            map(
-                lambda pos: DayAndNightAction(pos),
-                range(0, self.get_num_cols()))
-        ))
-    
+ 
     def get_possible_actions(self):
         return self.get_possible_add_actions() + self.get_possible_move_actions()
 

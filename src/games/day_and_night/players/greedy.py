@@ -12,84 +12,90 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
         super().__init__(name)
         self.add_turn_counter = 0
         self.move_turn_counter = 0
+    
+    def get_distance(self, pos1, pos2):
+        print("pos 1",pos1)
+        print("pos 2",pos2)
+
+        return abs(pos1[0] - pos2.get_row()) + abs(pos1[1] - pos2.get_col())
+
+    def get_move_action(self, state: DayAndNightState):
+        possible_move_actions = state.get_possible_move_actions()
+        grid = state.get_grid()
+        selected_move = None
+
+        # get the black places where the player has pieces
+        player_blk_pieces = []
+        for row in range(0, state.get_num_rows()):
+            for col in range(0, state.get_num_cols()):
+                if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())):
+                    player_blk_pieces.append((row, col))
+        
+        if len(player_blk_pieces) == 0:
+            # player has no pieces on the board, can't move
+            return None
+
+        # choose the best move action
+        for move_action in possible_move_actions:
+            if selected_move is None:
+                selected_move = move_action
+            else:
+                min_distance = float('inf')
+                for blk_piece in player_blk_pieces:
+                    distance = self.get_distance(blk_piece, move_action)
+                    if distance < min_distance:
+                        min_distance = distance
+                if min_distance < self.get_distance(player_blk_pieces[0], selected_move):
+                    selected_move = move_action
+
+        return selected_move
+
+
+    def get_add_action(self, state: DayAndNightState):
+        possible_add_actions = state.get_possible_add_actions()
+        grid = state.get_grid()
+        selected_add = None
+        num_rows = state.get_num_rows()
+        num_cols = state.get_num_cols()
+
+        # get the player pieces
+        player_pieces = []
+        for row in range(0, state.get_num_rows()):
+            for col in range(0, state.get_num_cols()):
+                if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())) or \
+                    grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())):
+                    player_pieces.append((row, col))
+
+        print("player_pieces",player_pieces)
+        if len(player_pieces) == 0:
+            # no pieces on the board, add a piece to the center
+            return DayAndNightAddAction(choice([num_cols // 2, num_cols // 2 - 1]), 
+                                       choice([num_rows // 2, num_rows // 2 - 1]))
+        else:
+            # choose the best add action
+            min_distance = float('inf')
+            for add_action in possible_add_actions:
+                for player_piece in player_pieces:
+                    distance = self.get_distance(player_piece, add_action)
+                    if distance < min_distance:
+                        min_distance = distance
+                        selected_add = add_action
+
+            return selected_add
 
     def get_action(self, state: DayAndNightState):
         grid = state.get_grid()
-        selected_row_from = None
-        selected_col_from = None
-        selected_row_to = None
-        selected_col_to = None
-        max_count = 0
+    
+        move = self.get_move_action(state)
+        if move is not None:
+            return move
         
-        #state.display()
-        possible_add_actions = state.get_possible_add_actions()
-        possible_move_actions = state.get_possible_move_actions()
-        if self.add_turn_counter <= 3 and len(possible_add_actions) > 0:
-            for row in range(0, state.get_num_rows()):
-                for col in range(0, state.get_num_cols()):
-                    if not state.validate_action(DayAndNightAddAction(col,row)):
-                        continue
-
-                    count = 0
-                    for row in range(0, state.get_num_rows()):
-                        for col in range(0, state.get_num_cols()):
-                            if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())) or\
-                                    grid[row][col] == int(str(state.EMPTY_WHI) + str(self.get_current_pos())):
-                                count += 1
-                            if selected_col_to is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui1")
-                                selected_col_to = col
-                                max_count = count
-
-                            if selected_row_to is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui2")
-                                selected_row_to = row
-                                max_count = count
-
-            self.add_turn_counter += 1
-            return DayAndNightAddAction(selected_row_to,selected_col_to)
+        add = self.get_add_action(state)
+        if add is not None:
+            return add
         
-        elif self.move_turn_counter <= 2 and len(possible_move_actions) > 0:
-            for row in range(0, state.get_num_rows()):
-                for col in range(0, state.get_num_cols()):
-                    if not state.validate_action(DayAndNightAddAction(col,row)):
-                        continue
-
-                    count = 0
-                    for row in range(0, state.get_num_rows()):
-                        for col in range(0, state.get_num_cols()):
-                            if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())) or\
-                                    grid[row][col] == int(str(state.EMPTY_WHI) + str(self.get_current_pos())):
-                                count += 1
-                                print("count: ", count)
-                            if selected_col_from is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui1")
-                                selected_col_from = col
-                                max_count = count
-
-                            if selected_row_from is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui2")
-                                selected_row_from = row
-                                max_count = count
-                            if selected_col_to is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui1")
-                                selected_col_to = col
-                                max_count = count
-
-                            if selected_row_to is None or count > max_count or (count == max_count and choice([False, True])):
-                                #print("aqui2")
-                                selected_row_to = row
-                                max_count = count
-
-            self.move_turn_counter += 1
-            return DayAndNightMoveAction(selected_row_from,selected_col_from,selected_row_to,selected_col_to)
-        else:
-            self.add_turn_counter = 0
-            self.move_turn_counter = 0
-            return None
-
-        if selected_col_to is None or selected_row_to is None:
-            raise Exception("There is no valid action")
+        # If there are no possible moves or add actions, return None
+        return None
 
         
 
