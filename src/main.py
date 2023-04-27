@@ -19,7 +19,7 @@ def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
 def main():
     print("ESTG IA Games Simulator")
 
-    num_iterations = 1
+    num_iterations = 100
 
     c4_simulations = [
         # uncomment to play as human
@@ -29,8 +29,8 @@ def main():
         #    "player1": HumanDayAndNightPlayer("Human 2")
         # },
         {
-            "name": "Day and Night - Human VS Greedy",
-            "player1": HumanDayAndNightPlayer("Human"),
+            "name": "Day and Night - Random VS Greedy",
+            "player1": RandomDayAndNightPlayer("Random"),
             "player2": GreedyDayAndNightPlayer("Greedy")
         },
         # {

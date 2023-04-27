@@ -14,10 +14,13 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
         self.move_turn_counter = 0
     
     def get_distance(self, pos1, pos2):
-        print("pos 1",pos1)
-        print("pos 2",pos2)
-
-        return abs(pos1[0] - pos2.get_row()) + abs(pos1[1] - pos2.get_col())
+        #print("pos 1",pos1)
+        #print("pos 2",pos2)
+        if isinstance(pos2, DayAndNightAddAction):
+            return abs(pos1[0] - pos2.get_row()) + abs(pos1[1] - pos2.get_col())
+        else:
+            return abs(pos1[0] - pos2.get_row_to()) + abs(pos1[1] - pos2.get_col_to()) 
+        
 
     def get_move_action(self, state: DayAndNightState):
         possible_move_actions = state.get_possible_move_actions()
@@ -31,8 +34,7 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
                 if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())):
                     player_blk_pieces.append((row, col))
         
-        if len(player_blk_pieces) == 0:
-            # player has no pieces on the board, can't move
+        if len(player_blk_pieces) < 4 :
             return None
 
         # choose the best move action
@@ -66,7 +68,7 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
                     grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())):
                     player_pieces.append((row, col))
 
-        print("player_pieces",player_pieces)
+        #print("player_pieces",player_pieces)
         if len(player_pieces) == 0:
             # no pieces on the board, add a piece to the center
             return DayAndNightAddAction(choice([num_cols // 2, num_cols // 2 - 1]), 
