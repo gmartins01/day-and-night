@@ -14,8 +14,6 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
         self.move_turn_counter = 0
     
     def get_distance(self, pos1, pos2):
-        #print("pos 1",pos1)
-        #print("pos 2",pos2)
         if isinstance(pos2, DayAndNightAddAction):
             return abs(pos1[0] - pos2.get_row()) + abs(pos1[1] - pos2.get_col())
         else:
@@ -33,6 +31,15 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
             for col in range(0, state.get_num_cols()):
                 if grid[row][col] == int(str(state.EMPTY_BLK) + str(self.get_current_pos())):
                     player_blk_pieces.append((row, col))
+
+        player_whi_pieces = []
+        for row in range(0, state.get_num_rows()):
+            for col in range(0, state.get_num_cols()):
+                if grid[row][col] == int(str(state.EMPTY_WHI) + str(self.get_current_pos())):
+                    player_whi_pieces.append((row, col))
+        
+        if len(player_whi_pieces) >=  len(player_blk_pieces):
+            return None
         
         if len(player_blk_pieces) < 4 :
             return None
@@ -85,9 +92,7 @@ class GreedyDayAndNightPlayer(DayAndNightPlayer):
 
             return selected_add
 
-    def get_action(self, state: DayAndNightState):
-        grid = state.get_grid()
-    
+    def get_action(self, state: DayAndNightState):    
         move = self.get_move_action(state)
         if move is not None:
             return move

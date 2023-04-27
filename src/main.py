@@ -19,7 +19,7 @@ def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
 def main():
     print("ESTG IA Games Simulator")
 
-    num_iterations = 100
+    num_iterations = 10
 
     c4_simulations = [
         # uncomment to play as human
@@ -28,21 +28,21 @@ def main():
         #    "player2": HumanDayAndNightPlayer("Human 1"),
         #    "player1": HumanDayAndNightPlayer("Human 2")
         # },
-        {
-            "name": "Day and Night - Random VS Greedy",
-            "player1": RandomDayAndNightPlayer("Random"),
-            "player2": GreedyDayAndNightPlayer("Greedy")
-        },
+        # {
+        #     "name": "Day and Night - Random VS Greedy",
+        #     "player1": RandomDayAndNightPlayer("Random"),
+        #     "player2": GreedyDayAndNightPlayer("Greedy")
+        # },
         # {
         #     "name": "Minimax VS Random",
         #     "player1": MinimaxDayAndNightPlayer("Minimax"),
         #     "player2": RandomDayAndNightPlayer("Random")
         # },
-        # {
-        #     "name": "Minimax VS Greedy",
-        #     "player1": MinimaxDayAndNightPlayer("Minimax"),
-        #     "player2": GreedyDayAndNightPlayer("Greedy")
-        # }
+        {
+            "name": "Minimax VS Greedy",
+            "player1": MinimaxDayAndNightPlayer("Minimax"),
+            "player2": GreedyDayAndNightPlayer("Greedy")
+        }
     ]
 
     for sim in c4_simulations:

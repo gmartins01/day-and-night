@@ -81,23 +81,23 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
                 seq1 = (1 if grid[row][col] == CURRENT_ON_BLACK or\
                          grid[row][col] == CURRENT_ON_WHITE else 0) + \
                        (1 if grid[row + 1][col + 1] == CURRENT_ON_BLACK or \
-                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                        grid[row + 1][col + 1] == CURRENT_ON_WHITE else 0) + \
                        (1 if grid[row + 2][col + 2] == CURRENT_ON_BLACK or\
                         grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0)
 
                 seq2 = (1 if grid[row + 1][col + 1] == CURRENT_ON_BLACK or\
-                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
+                        grid[row + 1][col + 1] == CURRENT_ON_WHITE else 0) + \
                        (1 if grid[row + 2][col + 2] == CURRENT_ON_BLACK or\
                         grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0) + \
                        (1 if grid[row + 3][col + 3] == CURRENT_ON_BLACK or\
-                        grid[row + 2][col + 2] == CURRENT_ON_WHITE else 0)
+                        grid[row + 3][col + 3] == CURRENT_ON_WHITE else 0)
 
                 if seq1 > longest:
                     longest = seq1
 
                 if seq2 > longest:
                     longest = seq2
-
+        #print("longest ",longest)
         return longest
 
     """Implementation of minimax search (recursive, with alpha/beta pruning) :param state: the state for which the 
@@ -107,6 +107,7 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
 
     def minimax(self, state: DayAndNightState, depth: int, alpha: int = -math.inf, beta: int = math.inf,
                 is_initial_node: bool = True):
+        #state.display()
         # first we check if we are in a terminal node (victory, draw or loose)
         if state.is_finished():
             return {
@@ -124,8 +125,8 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
             # very small integer
             value = -math.inf
             selected_action = None
-
             for action in state.get_possible_actions():
+
                 pre_value = value
                 value = max(value, self.minimax(state.sim_play(action), depth - 1, alpha, beta, False))
                 if value > pre_value:
@@ -133,8 +134,7 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
                 if value > beta:
                     break
                 alpha = max(alpha, value)
-            print("value: ", value)
-            print("selected action: ", selected_action)
+
             return selected_action if is_initial_node else value
 
         # if it is the opponent's turn
@@ -148,7 +148,7 @@ class MinimaxDayAndNightPlayer(DayAndNightPlayer):
             return value
 
     def get_action(self, state: DayAndNightState):
-        return self.minimax(state, 5)
+        return self.minimax(state, 1)
 
     def event_action(self, pos: int, action, new_state: State):
         # ignore
