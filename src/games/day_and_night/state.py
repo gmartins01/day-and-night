@@ -14,11 +14,11 @@ class DayAndNightState(State):
     EMPTY_BLK = -1
     EMPTY_WHI = -2
 
-    def __init__(self, size: int = 11):
+    def __init__(self, size: int):
         super().__init__()
 
-        if size != 11:
-            raise Exception("the number of rows and cols must be 11")
+        if size < 11 or size > 19 or size % 2 == 0:
+            raise Exception("the number of rows and cols must be an odd number between 11 and 19")
 
         """
         the dimensions of the board
@@ -29,19 +29,21 @@ class DayAndNightState(State):
         """
         the grid
         """
-        self.__grid = [
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
-            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
-            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
-            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
-            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI],
-            [BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK],
-            [WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI,BLK,WHI]
-        ]
+        self.__grid = []
+        for i in range(self.__num_rows):
+            row = []
+            for j in range(self.__num_cols):
+                if i % 2 == 0:
+                    if j % 2 == 0:
+                        row.append(WHI)
+                    else:
+                        row.append(BLK)
+                else:
+                    if j % 2 == 0:
+                        row.append(BLK)
+                    else:
+                        row.append(WHI)
+            self.__grid.append(row)
 
         """
         counts the number of turns in the current game

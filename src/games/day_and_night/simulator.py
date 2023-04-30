@@ -5,7 +5,7 @@ from games.game_simulator import GameSimulator
 
 class DayAndNightSimulator(GameSimulator):
 
-    def __init__(self, player1: DayAndNightPlayer, player2: DayAndNightPlayer, size: int = 11):
+    def __init__(self, player1: DayAndNightPlayer, player2: DayAndNightPlayer, size: int):
         super(DayAndNightSimulator, self).__init__([player1, player2])
         """
         the number of rows and cols from the day_and_night grid

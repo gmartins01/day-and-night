@@ -13,8 +13,6 @@ class RandomDayAndNightPlayer(DayAndNightPlayer):
         self.move_turn_counter = 0
         
     def get_action(self, state: DayAndNightState):
-        grid = state.get_grid()
-        #state.display()
         possible_add_actions = state.get_possible_add_actions()
         possible_move_actions = state.get_possible_move_actions()
         if self.add_turn_counter < 4 and len(possible_add_actions) > 0:
@@ -30,7 +28,7 @@ class RandomDayAndNightPlayer(DayAndNightPlayer):
             # Reset the turn counters
             self.add_turn_counter = 0
             self.move_turn_counter = 0
-            # If all turns are completed, return None to signify the end of the player's turn
+            
             return None
         
     def event_action(self, pos: int, action, new_state: State):
