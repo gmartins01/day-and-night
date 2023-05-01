@@ -35,14 +35,14 @@ class DayAndNightState(State):
             for j in range(self.__num_cols):
                 if i % 2 == 0:
                     if j % 2 == 0:
-                        row.append(WHI)
+                        row.append(self.EMPTY_WHI)
                     else:
-                        row.append(BLK)
+                        row.append(self.EMPTY_BLK)
                 else:
                     if j % 2 == 0:
-                        row.append(BLK)
+                        row.append(self.EMPTY_BLK)
                     else:
-                        row.append(WHI)
+                        row.append(self.EMPTY_WHI)
             self.__grid.append(row)
 
         """
@@ -61,8 +61,8 @@ class DayAndNightState(State):
         self.__has_winner = False
 
     def __check_winner(self, player):
-        player_on_black = int(str(BLK) + str(player))
-        player_on_white = int(str(WHI) + str(player))
+        player_on_black = int(str(self.EMPTY_BLK) + str(player))
+        player_on_white = int(str(self.EMPTY_WHI) + str(player))
         # check for 5 across
         for row in range(0, self.__num_rows):
             for col in range(0, self.__num_cols - 4):
@@ -121,12 +121,8 @@ class DayAndNightState(State):
         if row < 0 or row >= self.__num_rows:
             return False
 
-        # full column
-        #if self.__grid[0][col] != DayAndNightState.EMPTY_CELL:
-        #    return False
-
         # valid move
-        if self.__grid[row][col] != BLK:
+        if self.__grid[row][col] != self.EMPTY_BLK:
             return False
 
         return True
@@ -139,13 +135,17 @@ class DayAndNightState(State):
 
         cell_from_value = self.__grid[row_from][col_from]
         
-        # Get the last digit from the cell value
+        # Get the last digit from the cell value to get the player index
         player_index = int(str(cell_from_value)[len(str(cell_from_value)) - 1])
         
         # Check is cell from is empty
-        if cell_from_value == WHI or cell_from_value == BLK:
+        if cell_from_value == self.EMPTY_WHI or cell_from_value == self.EMPTY_BLK:
             return False
         
+        # Check if is moving from black
+        if cell_from_value != int(str(self.EMPTY_BLK)+str(player_index)):
+            return False
+
         # Check if player as a piece on the from position
         if player_index != self.__acting_player:
             return False
@@ -159,7 +159,7 @@ class DayAndNightState(State):
             return False
 
         # valid move
-        if self.__grid[row_to][col_to] != WHI or \
+        if self.__grid[row_to][col_to] != self.EMPTY_WHI or \
                 abs(row_to - row_from) > 1 or abs(col_to - col_from) > 1:
             return False
 
@@ -205,14 +205,12 @@ class DayAndNightState(State):
 
     def __display_cell(self, row, col):
         print({
-                  #0: ' B ',
-                  #1: ' W ',
-                  -10:'\033[1;40m B \033[0m',#◉
-                  -11:'\033[1;40m W \033[0m',
+                  -10:'\033[1;40m B \033[0m',
                   -20:'\033[1;47m B \033[0m',
+                  -11:'\033[1;40m W \033[0m',                
                   -21:'\033[1;47m W \033[0m',
-                  BLK: '\033[1;40m   \033[0m',
-                  WHI: '\033[1;47m   \033[0m'
+                  self.EMPTY_BLK: '\033[1;40m   \033[0m',
+                  self.EMPTY_WHI: '\033[1;47m   \033[0m'
               }[self.__grid[row][col]], end="")
 
     def __display_numbers(self):
@@ -222,7 +220,7 @@ class DayAndNightState(State):
             if col < 10:
                 print('  ', end="")
             if col >= 10:
-                print('  ', end="")
+                print(' ', end="")
             print(col, end="")
         print("")
 
@@ -234,7 +232,6 @@ class DayAndNightState(State):
     def display(self):
         print("  ", end="")
         self.__display_numbers()
-        #self.__display_separator()
 
         for row in range(0, self.__num_rows):
             if row < 10:
@@ -250,7 +247,7 @@ class DayAndNightState(State):
             print("")
             
         print("  ", end="")
-        #self.__display_separator()
+
         self.__display_numbers()
         print("")
         
@@ -329,7 +326,7 @@ class DayAndNightState(State):
         ))
  
     def get_possible_actions(self):
-        return self.get_possible_add_actions() + self.get_possible_move_actions()
+        return  self.get_possible_move_actions() + self.get_possible_add_actions()
 
     def sim_play(self, action):
         new_state = self.clone()
