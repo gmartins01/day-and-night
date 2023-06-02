@@ -20,7 +20,9 @@ def main():
     player1 = None
     player2 = None
     print("ESTG IA Games Simulator\n")
-    print("Day and Night Game\n")
+    print("----- Day and Night -----\n")
+    print("Author: Gonçalo Martins Nº24512\n")
+    print("Rules: https://www.boardspace.net/dayandnight/english/rules.html\n")
 
     while player1!=0 or player2!=0:
         while True:
