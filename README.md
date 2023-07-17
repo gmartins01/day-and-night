@@ -1,6 +1,7 @@
 # Artificial Intelligence | Informatics Engineering [@IPVC/ESTG](https://www.ipvc.pt/estg/)  #
 Teachers: [Jorge Ribeiro](mailto:jribeiro@estg.ipvc.pt) and [Luís Teófilo](mailto:luisteofilo@estg.ipvc.pt)
 ___
+
 ### Introduction ###
 
 The base code to create games in Python, using a Docker environment
@@ -39,3 +40,12 @@ docker compose run --rm app python example.py
 ```
 docker compose run --rm ai-games python main.py
 ```
+### Screenshots ###
+
+#### Game menu: ####
+
+![Alt text](./assets/menu.png?raw=true "Game menu")
+
+#### Board: ####
+
+![Alt text](./assets/board.png?raw=true "Game board")
